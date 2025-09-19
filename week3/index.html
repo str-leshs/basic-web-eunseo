@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Message</title>
+</head>
+<body>
+  <script>
+
+    //실습 a
+    function getMessage(name) {
+      return `Hello, ${name}...`;
+    }
+
+    const message = getMessage('Ornella');
+    document.write(message);
+
+
+    // 실습 b,c
+    function intro1() {
+      return `안녕하세요! 제 이름은 이은서입니다.`;
+    }
+    function intro2() {
+      return `자바스크립트는 오랜만이라 어색하지만....`;
+    }
+    function intro3() {
+      return `화이팅...!`;
+    }
+
+    const intros = [intro1, intro2, intro3];
+    let index = 0;
+
+
+    const intervalX = setInterval(() => {
+      document.write(`<p>${intros[index]()}</p>`);
+      index++;
+
+      if (index >= intros.length) {
+        clearInterval(intervalX); //clearInterval : 함수 반복 중단 
+      }
+    }, 1500);
+
+  </script>
+  
+</body>
+</html>
