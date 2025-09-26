@@ -38,16 +38,13 @@ else {
     
     if (bankSum > 21) {
       console.log('You win');
-    } 
-    else if (bankSum === 21 && (cardOneBank + cardTwoBank === 21)) {
+    } else if (bankSum === 21 && (cardOneBank + cardTwoBank === 21)) {
       console.log('You lose');
-    }
-    else if (sum > bankSum) {
+    } else if (sum > bankSum) {
       console.log('You win');
     } else if (sum < bankSum) {
       console.log('You lose');
-    } 
-    else {
+    } else {
       console.log('Draw');
     }
 }
