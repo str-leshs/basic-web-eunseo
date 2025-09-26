@@ -4,15 +4,20 @@
 // 카드 합계가 같은 경우 무승부 (Draw).
 // 21점을 초과한 쪽이 무조건 패배.
 
-let cardOne = 7;
-let cardTwo = 5;
+//숫자 카드 2~10, 그림 카드(J, Q, K)는 10, 에이스(A)는 1 or 10
+function randCard(){
+  return Math.floor(Math.random()*10 +1);
+}
+
+let cardOne = randCard();
+let cardTwo = randCard();
 let sum = cardOne + cardTwo;
 
-let cardOneBank = 7;
-let cardTwoBank = 5;
+let cardOneBank = randCard();
+let cardTwoBank = randCard();
 let bankSum = cardOneBank + cardTwoBank;
 
-let cardThree = 7;
+let cardThree = randCard();
 sum += cardThree;
 
 console.log(`You have ${sum} points`);
@@ -26,11 +31,11 @@ if (sum === 21 && (cardOne + cardTwo === 21)) {
 //플레이어가 21점 이하인 경우
 else {
     if (bankSum < 17) {
-      let cardThreeBank = 6;
+      let cardThreeBank = randCard();
       bankSum += cardThreeBank;
         
         if (bankSum < 17) {
-          let cardFourBank = 4;
+          let cardFourBank = randCard();
           bankSum += cardFourBank;
         }
     }
