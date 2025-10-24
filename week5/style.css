@@ -1,18 +1,22 @@
-h1{
+h1 {
   color: aquamarine;
   text-align: center;
 }
 
 body {
   font-family: helvetica, arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 #left-container {
   left: 0px;
-  }
+}
+
 #right-container {
   right: 0px;
 }
+
 .container {
   background-color: #eee;
   width: 15%;
@@ -21,11 +25,14 @@ body {
   height: 100%;
   padding: 10px;
 }
+
 .plant-holder {
   position: relative;
   height: 13%;
   left: -10px;
+  margin-bottom: 20px;
 }
+
 .plant {
   position: absolute;
   max-width: 150%;
@@ -33,6 +40,22 @@ body {
   z-index: 2;
 }
 
+/* 각 식물별 개별 위치 지정 */
+#plant1 {
+  top: 20%;
+}
+
+#plant7 {
+  top: 60%;
+}
+
+#plant8 {
+  top: 20%;
+}
+
+#plant14 {
+  top: 60%;
+}
 
 .jar-walls {
   height: 80%;
@@ -57,7 +80,6 @@ body {
   z-index: 1;
 }
 
-/* 병 바닥 */
 .jar-bottom {
   width: 50%;
   height: 1%;
@@ -78,4 +100,29 @@ body {
   left: 20%;
   opacity: 0.7;
   z-index: -1;
+}
+
+/* 광택 효과 추가 */
+.jar-glossy-long {
+  position: absolute;
+  height: 15%;
+  width: 3%;
+  background: whitesmoke;
+  opacity: 0.7;
+  z-index: 2;
+  left: 8%;
+  top: 55%;
+  border-radius: 1rem;
+}
+
+.jar-glossy-short {
+  position: absolute;
+  height: 5%;
+  width: 3%;
+  background: whitesmoke;
+  opacity: 0.6;
+  z-index: 2;
+  left: 8%;
+  top: 47%;
+  border-radius: 1rem;
 }
