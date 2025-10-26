@@ -1,5 +1,5 @@
 h1 {
-  color: aquamarine;
+  color: burlywood;
   text-align: center;
 }
 
@@ -28,7 +28,7 @@ body {
 
 .plant-holder {
   position: relative;
-  height: 13%;
+  height: 10%;
   left: -10px;
   margin-bottom: 20px;
 }
@@ -40,7 +40,6 @@ body {
   z-index: 2;
 }
 
-/* 각 식물별 개별 위치 지정 */
 #plant1 {
   top: 20%;
 }
@@ -102,7 +101,6 @@ body {
   z-index: -1;
 }
 
-/* 광택 효과 추가 */
 .jar-glossy-long {
   position: absolute;
   height: 15%;
