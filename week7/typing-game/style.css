@@ -1,0 +1,150 @@
+.highlight {
+  background-color: yellow;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-weight: bold;
+}
+
+.error {
+  background-color: lightcoral;
+  border: 2px solid red;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+.icon-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.icon-header i {
+  font-size: 4em;
+  color: blueviolet;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  color: #666;
+  line-height: 1.6;
+}
+
+#quote {
+  background-color: white;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 8px;
+  font-size: 1.2em;
+  min-height: 60px;
+  border: 2px solid #ddd;
+  max-width: 700px;
+}
+
+#quote span {
+  margin: 0 3px;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+  margin: 20px auto;
+  width: 500px;
+}
+
+#typed-value {
+  flex: 1;
+  padding: 12px;
+  font-size: 1.1em;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+#typed-value:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+}
+
+#typed-value:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+
+/* 입력 중일 때 */
+#typed-value.typing {
+  border-color: #2196F3;
+  background: linear-gradient(135deg, #ffffff 0%, #e3f2fd 100%);
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+}
+
+/* 올바르게 입력 중일 때 */
+#typed-value.correct-typing {
+  border-color: #4CAF50;
+  background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+}
+
+/* 에러 -> 흔들림 */
+#typed-value.error {
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-5px); }
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 1.1em;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+button:hover:not(:disabled) {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+#message {
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 5px;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 2px solid #c3e6cb;
+}
