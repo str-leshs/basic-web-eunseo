@@ -15,6 +15,8 @@ let startTime = Date.now();
 const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
+const startButton = document.getElementById('start');
+
 
 document.getElementById('start').addEventListener('click', () => {
   const quoteIndex = Math.floor(Math.random() * quotes.length);  
@@ -29,9 +31,15 @@ document.getElementById('start').addEventListener('click', () => {
 
   messageElement.innerText = '';  // 메시지 요소 초기화 
   typedValueElement.value = ''; // 입력 필드 초기화 
+  typedValueElement.disabled = false; // 입력 필드 활성화
   typedValueElement.focus();  //포커스 설정 
+
+  // !!!!TODO: 게임 시작 시 버튼 비활성화하기 !!!!
+  startButton.disabled = true;
+  startButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Playing...';
   startTime = new Date().getTime(); //타이필 시작 시간 기록 
 });
+
 
 
 typedValueElement.addEventListener('input', () => {
@@ -42,23 +50,34 @@ typedValueElement.addEventListener('input', () => {
   const elapsedTime = new Date().getTime() - startTime;   // 타이핑 소요 시간 계산 
   const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
   messageElement.innerText = message; 
+  messageElement.className = 'success';
+
+  // !!!!TODO 게임이 완료되면 텍스트 상자 비활성화 버튼 활성화!!!!
+  typedValueElement.disabled = true;
+  startButton.disabled = false;
+  startButton.innerHTML = '<i class="fa-solid fa-play"></i> Start';
+  
+  // 트로피 아이콘 추가
+  messageElement.innerHTML = '<i class="fa-solid fa-trophy"></i> ' + message;
+
   } 
   
+  //현재 단어 완료 
   else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) { //입력값 공백으로 끝났는지, 공백 제거한 값이 현재 단어와 일치하는지 확인 
   typedValueElement.value = ''; // 입력 필드 초기화 -> 다음 입력 준비 
   wordIndex++;
-
   for (const wordElement of quoteElement.childNodes) {  // 모든 강조 표시 제거
   wordElement.className = '';
   }
-
   quoteElement.childNodes[wordIndex].className = 'highlight'; //다음 타이핑 단어에 클래스 추가 
   }
 
+  //올바른 입력
   else if (currentWord.startsWith(typedValue)) {  // 현재 단어 일부를 맞게 입력하고있는지 확인 
   typedValueElement.className = ''; //맞으면 클래스 제거 
   } 
   
+  //잘못된 입력
   else {  
   typedValueElement.className = 'error';  //틀리면 에러 클래스 추가 
   }
