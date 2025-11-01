@@ -1,0 +1,234 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+}
+
+.container {
+  width: 350px;
+  padding: 35px 30px 30px;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+
+img {
+  width: 100%;
+  max-width: 220px;
+  display: block;
+  margin: 0 auto 20px;
+}
+
+h1 {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 25px;
+  line-height: 1.3;
+  color: #1a1a1a;
+  letter-spacing: -0.3px;
+}
+
+h2 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 22px;
+  color: #1a1a1a;
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+.form-data {
+  display: block;
+}
+
+.form-data > div {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+  color: #1a1a1a;
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 11px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 14px;
+  margin-bottom: 16px;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  font-family: 'Malgun Gothic','맑은 고딕',sans-serif;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #2196F3;
+  background: #ffffff;
+}
+
+input[type="text"]::placeholder {
+  color: #999999;
+}
+
+button {
+  width: 100%;
+  padding: 11px 20px;
+  background-color: #2196F3;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  letter-spacing: -0.2px;
+  font-family: 'Malgun Gothic','맑은 고딕',sans-serif;
+}
+
+button:hover {
+  background-color: #1976D2;
+}
+
+button:active {
+  background-color: #1565C0;
+}
+
+.search-btn {
+  background-color: #2196F3;
+}
+
+.clear-btn {
+  background-color: #2196F3;
+  margin-top: 0;
+}
+
+.result {
+  display: none;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  display: none;
+  color: #666666;
+  font-size: 14px;
+}
+
+.errors {
+  color: #f44336;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 13px;
+}
+
+.data {
+  display: none;
+}
+
+.result-container {
+  background: #ffffff;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.result-container p {
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #1a1a1a;
+  letter-spacing: -0.2px;
+}
+
+.result-container p:last-child {
+  margin-bottom: 0;
+}
+
+.result-container strong {
+  font-weight: 700;
+  color: #1a1a1a;
+  display: inline;
+}
+
+.result-container span {
+  color: #1a1a1a;
+  font-weight: 400;
+}
+
+/* ========== 다크모드 ========== */
+@media (prefers-color-scheme: dark) {
+  html, body {
+    background: #1e1e1e;
+  }
+
+  .container {
+    background: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  h1 {
+    color: #ffffff;
+  }
+
+  h2 {
+    color: #ffffff;
+  }
+
+  label {
+    color: #e0e0e0;
+  }
+
+  input[type="text"] {
+    background: #2d2d2d;
+    border-color: #3d3d3d;
+    color: #ffffff;
+  }
+
+  input[type="text"]:focus {
+    border-color: #42A5F5;
+    background: #353535;
+  }
+
+  input[type="text"]::placeholder {
+    color: #6d6d6d;
+  }
+
+  button {
+    background-color: #1976D2;
+  }
+
+  button:hover {
+    background-color: #1565C0;
+  }
+
+  .result-container {
+    background: #1e1e1e;
+  }
+
+  .result-container p {
+    color: #e0e0e0;
+  }
+
+  .result-container strong {
+    color: #ffffff;
+  }
+
+  .result-container span {
+    color: #e0e0e0;
+  }
+
+  .errors {
+    color: #ff5252;
+  }
+
+  .loading {
+    color: #b0b0b0;
+  }
+}
