@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 // form fields
 const form = document.querySelector('.form-data');
 const region = document.querySelector('.region-name');
@@ -12,68 +14,120 @@ const fossilfuel = document.querySelector('.fossil-fuel');
 const myregion = document.querySelector('.my-region');
 const clearBtn = document.querySelector('.clear-btn');
 
-// 이벤트 리스너
+const calculateColor = async (value) => {
+    let co2Scale = [0, 150, 600, 750, 800];
+    let colors = ['#2AA364', '#F5EB4D', '#9E4229', '#381D02', '#381D02'];
+
+    let closestNum = co2Scale.sort((a, b) => {
+        return Math.abs(a - value) - Math.abs(b - value);
+    })[0];
+    //console.log(value + ' is closest to ' + closestNum);
+    let num = (element) => element > closestNum;
+    let scaleIndex = co2Scale.findIndex(num);
+
+    let closestColor = colors[scaleIndex];
+    //console.log(scaleIndex, closestColor);
+
+    chrome.runtime.sendMessage({ action: 'updateIcon', value: { color: closestColor } });
+};
+
+async function displayCarbonUsage(apiKey, region) {
+    try {
+        // Fetch carbon intensity data from CO2 Signal API
+        const response = await fetch('https://api.electricitymaps.com/v3/carbon-intensity/latest', {
+            method: 'GET',
+            headers: {
+                'auth-token': apiKey,
+                'Content-Type': 'application/json'
+            },
+            // Add query parameters for the specific region
+            ...new URLSearchParams({ countryCode: region }) && {
+                url: `https://api.electricitymaps.com/v3/carbon-intensity/latest?countryCode=${region}`
+            }
+        });
+
+        // Check if the API request was successful
+        if (!response.ok) {
+            throw new Error(`API request failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const carbonData = data;
+        // Calculate rounded carbon intensity value
+        let carbonIntensity = Math.round(carbonData.carbonIntensity);
+
+        calculateColor(carbonIntensity);
+
+        // Update the user interface with fetched data
+        loading.style.display = 'none';
+        form.style.display = 'none';
+        myregion.textContent = region.toUpperCase();
+        usage.textContent = `${carbonIntensity} grams (grams CO₂ emitted per kilowatt hour)`;
+        // fossilfuel.textContent = `${carbonData.fossilFuelPercentage.toFixed(2)}% (percentage of fossil fuels used to generate electricity)`;
+        results.style.display = 'block';
+
+        // TODO: calculateColor(carbonIntensity) - implement in next lesson
+
+    } catch (error) {
+        console.error('Error fetching carbon data:', error);
+        
+        // Show user-friendly error message
+        loading.style.display = 'none';
+        results.style.display = 'none';
+        errors.textContent = 'Sorry, we couldn\'t fetch data for that region. Please check your API key and region code.';
+    }
+}
+// set up api key and region
+const setUpUser = async (apiKey, regionName) => {
+	localStorage.setItem('apiKey', apiKey);
+	localStorage.setItem('regionName', regionName);
+	loading.style.display = 'block';
+	errors.textContent = '';
+	clearBtn.style.display = 'block';
+	//make initial call
+	displayCarbonUsage(apiKey, regionName);
+};
+
+// handle form submission
+const handleSubmit = async (e) => {
+	e.preventDefault();
+	setUpUser(apiKey.value, region.value);
+};
+
+
+//initial checks
+function init() {
+    // Check if user has previously saved API credentials
+    const storedApiKey = localStorage.getItem('apiKey');
+    const storedRegion = localStorage.getItem('regionName');
+
+    // Set extension icon to generic green (placeholder for future lesson)
+    // TODO: Implement icon update in next lesson
+
+    if (storedApiKey === null || storedRegion === null) {
+        // First-time user: show the setup form
+        form.style.display = 'block';
+        results.style.display = 'none';
+        loading.style.display = 'none';
+        clearBtn.style.display = 'none';
+        errors.textContent = '';
+    } else {
+        // Returning user: load their saved data automatically
+        displayCarbonUsage(storedApiKey, storedRegion);
+        results.style.display = 'none';
+        form.style.display = 'none';
+        clearBtn.style.display = 'block';
+    }
+}
+const reset = async (e) => {
+	e.preventDefault();
+	//clear local storage for region only
+	localStorage.removeItem('regionName');
+	init();
+};
+
 form.addEventListener('submit', (e) => handleSubmit(e));
 clearBtn.addEventListener('click', (e) => reset(e));
+
+//start app
 init();
-
-// reset 함수
-function reset(e) {
-  e.preventDefault();
-  localStorage.removeItem('regionName');
-  localStorage.removeItem('apiKey');
-  init();
-}
-
-// init 함수
-function init() {
-  const storedApiKey = localStorage.getItem('apiKey');
-  const storedRegion = localStorage.getItem('regionName');
-
-  //set icon to be generic green
-  //todo
-  
-  if (storedApiKey === null || storedRegion === null) {
-    form.style.display = 'block';
-    results.style.display = 'none';
-    loading.style.display = 'none';
-    clearBtn.style.display = 'none';
-    errors.textContent = '';
-  } else {
-    displayCarbonUsage(storedApiKey, storedRegion);
-    results.style.display = 'none';
-    form.style.display = 'none';
-    clearBtn.style.display = 'block';
-  }
-}
-
-// handleSubmit 함수
-function handleSubmit(e) {
-  e.preventDefault();
-  setUpUser(apiKey.value, region.value);
-}
-
-// setUpUser 함수
-function setUpUser(apiKey, regionName) {
-  localStorage.setItem('apiKey', apiKey);
-  localStorage.setItem('regionName', regionName);
-  loading.style.display = 'block';
-  errors.textContent = '';
-  clearBtn.style.display = 'block';
-  displayCarbonUsage(apiKey, regionName);
-}
-
-// displayCarbonUsage 함수 (임시)
-function displayCarbonUsage(apiKey, regionName) {
-  console.log('API Key:', apiKey);
-  console.log('Region:', regionName);
-  loading.style.display = 'none';
-  form.style.display = 'none';
-  clearBtn.style.display = 'block';
-  results.style.display = 'block';
-  
-  // 임시 데이터 표시
-  myregion.textContent = regionName;
-  usage.textContent = '292 grams (grams CO2 emitted per kilowatt hour)';
-  fossilfuel.textContent = '55.41% (percentage of fossil fuels used to generate electricity)';
-}

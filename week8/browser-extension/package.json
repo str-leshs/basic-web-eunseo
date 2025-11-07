@@ -7,13 +7,11 @@
   "npm": ">=9.0.0",
   "node": ">=18.0.0"
   },
-
   "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
   "watch": "webpack --watch",
   "build": "webpack"
   },
-
   "keywords": [
   "chrome extension",
   "edge extension",
