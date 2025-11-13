@@ -16,69 +16,168 @@ const quoteElement = document.getElementById('quote');
 const messageElement = document.getElementById('message');
 const typedValueElement = document.getElementById('typed-value');
 const startButton = document.getElementById('start');
+const modal = document.getElementById('result-modal');
+const playAgainBtn = document.getElementById('play-again-btn');
+const closeModalBtn = document.getElementById('close-modal-btn');
+const bestTimeDisplay = document.getElementById('best-time');
 
+// 페이지 로드 시 최고 기록 표시
+window.addEventListener('load', () => {
+  displayBestScore();
+});
 
-document.getElementById('start').addEventListener('click', () => {
-  const quoteIndex = Math.floor(Math.random() * quotes.length);  
-  const quote = quotes[quoteIndex]; // 위에서 돌린 랜덤 인덱스 값으로 인용문 선택
+// 최고 기록 표시 함수
+function displayBestScore() {
+  const bestTime = localStorage.getItem('bestTime');
+  if (bestTime && bestTimeDisplay) {
+    bestTimeDisplay.textContent = bestTime;
+  } else if (bestTimeDisplay) {
+    bestTimeDisplay.textContent = '--';
+  }
+}
 
-  words = quote.split(' '); 
-  wordIndex = 0;  //초기화하고 
+// 게임 시작
+startButton.addEventListener('click', startGame);
 
-  const spanWords = words.map(function(word) { return `<span>${word} </span>` }); //span 태그로 감싼 후 배열에 저장한다. 
-  quoteElement.innerHTML = spanWords.join('');  // 하나의 문자열로 결합 및 설정
-  quoteElement.childNodes[0].className = 'highlight';   // 첫 단어 하이라이트 
+function startGame() {
+  const quoteIndex = Math.floor(Math.random() * quotes.length);
+  const quote = quotes[quoteIndex];
 
-  messageElement.innerText = '';  // 메시지 요소 초기화 
-  typedValueElement.value = ''; // 입력 필드 초기화 
-  typedValueElement.disabled = false; // 입력 필드 활성화
-  typedValueElement.focus();  //포커스 설정 
+  words = quote.split(' ');
+  wordIndex = 0;
 
-  // !!!!TODO: 게임 시작 시 버튼 비활성화하기 !!!!
+  const spanWords = words.map(word => `<span>${word} </span>`);
+  quoteElement.innerHTML = spanWords.join('');
+  quoteElement.childNodes[0].className = 'highlight';
+
+  messageElement.innerText = '';
+  typedValueElement.value = '';
+  typedValueElement.disabled = false;
+  typedValueElement.focus();
+  typedValueElement.className = '';
+
   startButton.disabled = true;
   startButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Playing...';
-  startTime = new Date().getTime(); //타이필 시작 시간 기록 
+  startTime = new Date().getTime();
+}
+
+// Enter키로 게임 시작하기 
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !startButton.disabled && modal && !modal.classList.contains('show')) {
+    startGame();
+  }
 });
 
-
-
+// 입력 이벤트 처리
 typedValueElement.addEventListener('input', () => {
   const currentWord = words[wordIndex];
-  const typedValue = typedValueElement.value; //입력값 저장 
+  const typedValue = typedValueElement.value;
 
-  if (typedValue === currentWord && wordIndex === words.length - 1) { // 마지막 단어까지 정확히 입력했는지 체크하기 
-  const elapsedTime = new Date().getTime() - startTime;   // 타이핑 소요 시간 계산 
-  const message = `CONGRATULATIONS! You finished in ${elapsedTime / 1000} seconds.`;
-  messageElement.innerText = message; 
-  messageElement.className = 'success';
-
-  // !!!!TODO 게임이 완료되면 텍스트 상자 비활성화 버튼 활성화!!!!
-  typedValueElement.disabled = true;
-  startButton.disabled = false;
-  startButton.innerHTML = '<i class="fa-solid fa-play"></i> Start';
-  
-  // 트로피 아이콘 추가
-  messageElement.innerHTML = '<i class="fa-solid fa-trophy"></i> ' + message;
-
-  } 
-  
-  //현재 단어 완료 
-  else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) { //입력값 공백으로 끝났는지, 공백 제거한 값이 현재 단어와 일치하는지 확인 
-  typedValueElement.value = ''; // 입력 필드 초기화 -> 다음 입력 준비 
-  wordIndex++;
-  for (const wordElement of quoteElement.childNodes) {  // 모든 강조 표시 제거
-  wordElement.className = '';
-  }
-  quoteElement.childNodes[wordIndex].className = 'highlight'; //다음 타이핑 단어에 클래스 추가 
+  // 입력 시작 시 typing 클래스 추가
+  if (typedValue.length > 0) {
+    typedValueElement.classList.add('typing');
+  } else {
+    typedValueElement.classList.remove('typing');
   }
 
-  //올바른 입력
-  else if (currentWord.startsWith(typedValue)) {  // 현재 단어 일부를 맞게 입력하고있는지 확인 
-  typedValueElement.className = ''; //맞으면 클래스 제거 
-  } 
-  
-  //잘못된 입력
-  else {  
-  typedValueElement.className = 'error';  //틀리면 에러 클래스 추가 
+  // 마지막 단어까지 정확히 입력 완료
+  if (typedValue === currentWord && wordIndex === words.length - 1) {
+    finishGame();
+  }
+  // 현재 단어 완료 (공백 포함)
+  else if (typedValue.endsWith(' ') && typedValue.trim() === currentWord) {
+    // 완성시
+    typedValueElement.className = 'perfect';
+    
+    // 완료된 단어
+    quoteElement.childNodes[wordIndex].className = 'completed';
+    
+    setTimeout(() => {
+      typedValueElement.value = '';
+      typedValueElement.className = '';
+      wordIndex++;
+      
+      if (wordIndex < words.length) {
+        quoteElement.childNodes[wordIndex].className = 'highlight';
+      }
+    }, 200);
+  }
+  //올바르게 입력 중
+  else if (currentWord.startsWith(typedValue)) {
+    typedValueElement.className = 'typing correct-typing';
+  }
+  //잘못된입력
+  else {
+    typedValueElement.className = 'typing error';
   }
 });
+
+// 게임 완료 처리
+function finishGame() {
+  const elapsedTime = new Date().getTime() - startTime;
+  const seconds = (elapsedTime / 1000).toFixed(2);
+
+  // localStorage에서 최고 기록 가져오기
+  const bestTime = localStorage.getItem('bestTime');
+  let isNewRecord = false;
+
+  // 최고 기록 갱신 확인
+  if (!bestTime || parseFloat(seconds) < parseFloat(bestTime)) {
+    localStorage.setItem('bestTime', seconds);
+    isNewRecord = true;
+    displayBestScore();
+  }
+
+  // 입력 필드 비활성화 및 버튼 활성화
+  typedValueElement.disabled = true;
+  typedValueElement.className = '';
+  startButton.disabled = false;
+  startButton.innerHTML = '<i class="fa-solid fa-play"></i> Start';
+
+  //모달에 결과 표시
+  showResultModal(seconds, localStorage.getItem('bestTime'), isNewRecord);
+}
+
+function showResultModal(time, bestTime, isNewRecord) {
+  const modalTimeElement = document.getElementById('modal-time');
+  const modalBestElement = document.getElementById('modal-best');
+  const newRecordBadge = document.getElementById('new-record-badge');
+
+  if (modalTimeElement) modalTimeElement.textContent = `${time}s`;
+  if (modalBestElement) modalBestElement.textContent = `${bestTime}s`;
+
+  if (newRecordBadge) {
+    if (isNewRecord) {
+      newRecordBadge.classList.remove('hidden');
+    } else {
+      newRecordBadge.classList.add('hidden');
+    }
+  }
+
+  if (modal) {
+    modal.classList.add('show');
+  }
+}
+
+// 모달 닫기
+if (closeModalBtn) {
+  closeModalBtn.addEventListener('click', () => {
+    modal.classList.remove('show');
+  });
+}
+// 모달창 외부 클릭해도 창닫기
+if (modal) {
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('show');
+    }
+  });
+}
+
+// 다시 플레이
+if (playAgainBtn) {
+  playAgainBtn.addEventListener('click', () => {
+    modal.classList.remove('show');
+    startGame();
+  });
+}

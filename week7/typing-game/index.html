@@ -26,6 +26,43 @@
     </button>
   </div>
 
+  <!-- 결과 모달 -->
+  <div id="result-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fa-solid fa-trophy trophy-icon"></i>
+        <h2>CONGRATULATIONS!</h2>
+      </div>
+      <div class="modal-body">
+        <div class="stat-item">
+          <i class="fa-solid fa-clock"></i>
+          <div>
+            <span class="stat-label">Your Time</span>
+            <span class="stat-value" id="modal-time">0</span>
+          </div>
+        </div>
+        <div class="stat-item">
+          <i class="fa-solid fa-crown"></i>
+          <div>
+            <span class="stat-label">Best Time</span>
+            <span class="stat-value" id="modal-best">--</span>
+          </div>
+        </div>
+        <div id="new-record-badge" class="new-record-badge hidden">
+          <i class="fa-solid fa-star"></i> NEW RECORD! <i class="fa-solid fa-star"></i>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="play-again-btn" class="modal-btn">
+          <i class="fa-solid fa-rotate-right"></i> Play Again
+        </button>
+        <button id="close-modal-btn" class="modal-btn secondary">
+          <i class="fa-solid fa-xmark"></i> Close
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
